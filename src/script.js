@@ -8,6 +8,11 @@ let form;
 let titleInput;
 let descriptionInput;
 let dateInput;
+let todosContainer;
+let todosPagination;
+
+let todos;
+const todosPerPage = 3;
 
 const renderHome = function () {
   const homeHtml = `<form class="form">
@@ -60,18 +65,11 @@ const renderHome = function () {
 };
 
 const getTodos = async function () {
-  console.log("hi");
   const response = await fetch(
     "https://60b77f8f17d1dc0017b8a2c4.mockapi.io/todos"
   );
-  console.log(response);
   const data = await response.json();
   return data;
-};
-
-const renderTodos = function () {
-  console.log("rendering todos");
-  getTodos().then((data) => console.log(data));
 };
 
 renderHome();
@@ -113,12 +111,14 @@ const showFormResult = function (formStatus, formDescription) {
       <p class="text-white text-sm" id="form-result-description">${formDescription}</p>
     </div>`;
   body.insertAdjacentHTML("beforeend", formResultHtml);
+  // form result fade in
   setTimeout(() => {
     body.lastElementChild.classList.replace(
       "form-result--invisible",
       "form-result--visible"
     );
   }, 1);
+  // form result fade out
   setTimeout(() => {
     body.lastElementChild.classList.replace(
       "form-result--visible",
@@ -195,7 +195,6 @@ form.addEventListener("submit", function (e) {
 
 nav.addEventListener("click", function (e) {
   if (!e.target.classList.contains("nav-link")) return;
-  console.log("pressed");
   let id = e.target.id;
   switch (id) {
     case "nav__home":
@@ -206,3 +205,72 @@ nav.addEventListener("click", function (e) {
       break;
   }
 });
+
+const renderTodo = function ({ title, description, dueDate, checked }) {
+  const todoHtml = `<div class="todo">
+          <div class="todo__header">
+            <div class="todo__checked ${
+              checked ? "todo-checked--true" : ""
+            }"></div>
+            <div class="todo__title text-lg">${title}</div>
+            <div class="todo__dueDate text-lg">${dueDate}</div>
+            <div class="todo__change">
+              <div class="todo__edit">
+                <img
+                  class="todo__edit__img"
+                  src="../assets/edit-icon.png"
+                  alt="Edit"
+                />
+              </div>
+              <div class="" class="todo__delete">
+                <img
+                  class="todo__edit__img"
+                  src="../assets/delete-icon.png"
+                  alt="Delete"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="todo__description">${description}</div>
+        </div>`;
+  console.log(todosContainer);
+  todosContainer.insertAdjacentHTML("beforeend", todoHtml);
+};
+
+const renderPage = function (currentPage, todosPerPage) {
+  let pageTodos = todos.slice(
+    todosPerPage * (currentPage - 1),
+    todosPerPage * currentPage
+  );
+  console.log(pageTodos);
+  pageTodos.forEach((todoObject) => {
+    renderTodo(todoObject);
+  });
+};
+
+const renderTodos = function () {
+  const todosHtml = `<div class="todos-container">
+      </div>
+      <div class="todos-pagination">
+        <div class="todos-pagination__selector">1</div>
+        <div class="todos-pagination__selector">...</div>
+        <div class="todos-pagination__selector">6</div>
+        <div
+          class="todos-pagination__selector todos-pagination__selector--active"
+        >
+          7
+        </div>
+        <div class="todos-pagination__selector">8</div>
+        <div class="todos-pagination__selector">...</div>
+        <div class="todos-pagination__selector">30</div>`;
+
+  getTodos().then((data) => {
+    todos = data.sort((todo1, todo2) =>
+      todo2.updatedAt.localeCompare(todo1.updatedAt)
+    );
+    content.innerHTML = todosHtml;
+    todosContainer = document.querySelector(".todos-container");
+    todosPagination = document.querySelector("todos-pagination");
+    renderPage(1, todosPerPage);
+  });
+};

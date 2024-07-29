@@ -616,7 +616,7 @@ video {
 
 .todos-pagination {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   margin: auto;
   margin-top: 15px;
   border: 4px solid black;
@@ -630,6 +630,11 @@ video {
   border-right: 2px solid black;
   text-align: center;
   font-weight: bold;
+}
+
+.todos-pagination__selector--active {
+  background-color: var(--blue-color);
+  color: white;
 }
 
 .todo {
