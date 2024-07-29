@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="./styles/output.css" rel="stylesheet" />
+    <script defer src="script.js"></script>
     <title>Home</title>
   </head>
   <body>
@@ -13,9 +14,9 @@
       <a class="text-blue-700 mx-2 hover:text-black" href="">Home</a>
       <a class="text-blue-700 mx-2 hover:text-black" href="">Todos</a>
     </nav>
-    <form action="" class="form">
+    <form class="form">
       <div class="form__sections">
-        <div class="form__sections__section form__sections__section--invalid">
+        <div class="form__sections__section">
           <label for="title-input">Title</label>
           <input
             class="form__sections__section__input"
@@ -23,7 +24,6 @@
             type="text"
             autocomplete="off"
             placeholder="What will you do today?"
-            required
           />
         </div>
         <div class="form__sections__section">
