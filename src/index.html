@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="./styles/output.css" rel="stylesheet" />
-    <script defer src="script.js"></script>
+    <!-- <script defer src="script.js"></script> -->
     <title>Home</title>
   </head>
-  <body>
+  <body class="box-border">
     <nav
       class="nav flex w-[100vw] fixed top-0 h-10 border-y-4 border-solid border-black items-center"
     >
@@ -18,7 +18,52 @@
         Todos
       </div>
     </nav>
-    <div class="content"></div>
+    <div class="content">
+      <div class="todos-container">
+        <div class="todo">
+          <div class="todo__header">
+            <div class="todo__checked"></div>
+            <div class="todo__title text-lg">Todo</div>
+            <div class="todo__dueDate text-lg">07-29-2024</div>
+            <div class="todo__change">
+              <div class="todo__edit">
+                <img
+                  class="todo__edit__img"
+                  src="../assets/edit-icon.png"
+                  alt="Edit"
+                />
+              </div>
+              <div class="" class="todo__delete">
+                <img
+                  class="todo__edit__img"
+                  src="../assets/delete-icon.png"
+                  alt="Delete"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="todo__description">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti,
+            doloremas incidunt nihil fuga obcaecati possimus laudantium nulla
+            enim quibusdam sapi Lorem ipsum dolor sit amet, consectetur
+            adipisicing elit. Voluptate quo molestias repudiandae
+            necessitatibus, ab assumenda illo magnam architecto impedit. Iure
+            excepturi sapiente voluptates soluta incidunt, architecto harum
+            quaerat nesciunt eum.ente.atum a repudiandae necessitatibus vero
+            porro perferendis dolorum.
+          </div>
+        </div>
+        <div class="todo"></div>
+        <div class="todo"></div>
+      </div>
+      <div class="todos-pagination">
+        <div class="todos-pagination__selector">1</div>
+        <div class="todos-pagination__selector">2</div>
+        <div class="todos-pagination__selector">3</div>
+        <div class="todos-pagination__selector">...</div>
+        <div class="todos-pagination__selector">7</div>
+      </div>
+    </div>
   </body>
   <div id="form-container" class=""></div>
 </html>
