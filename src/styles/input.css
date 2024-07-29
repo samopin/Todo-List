@@ -64,4 +64,12 @@
     background-color: var(--blue-color);
     color: white;
   }
+  .form-result--invisible {
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .form-result--visible {
+    opacity: 1;
+    transition: opacity 1s;
+  }
 }
