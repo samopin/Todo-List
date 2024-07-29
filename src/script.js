@@ -10,7 +10,6 @@ let descriptionInput;
 let dateInput;
 
 const renderHome = function () {
-  console.log("being reset");
   const homeHtml = `<form class="form">
       <div class="form__sections">
         <div class="form__sections__section">
@@ -81,15 +80,15 @@ const showFormResult = function (formStatus, formDescription) {
   switch (formStatus) {
     case "Successful":
       formColor = "bg-green-500";
-      formBorderColor = "bg-green-700";
+      formBorderColor = "border-green-700";
       break;
     case "Unsuccessful":
       formColor = "bg-red-500";
-      formBorderColor = "bg-red-700";
+      formBorderColor = "border-red-700";
       break;
     default:
       formColor = "bg-gray-500";
-      formBorderColor = "bg-gray-700";
+      formBorderColor = "border-gray-700";
   }
   const formResultHtml = `<div
       id="form-result"
@@ -176,6 +175,7 @@ form.addEventListener("submit", function (e) {
     .then((description) => showFormResult("Successful", description))
     .catch((err) => showFormResult("Unsuccessful", err.message));
   form.reset();
+  dateInput.valueAsDate = new Date();
 });
 
 nav.addEventListener("click", function (e) {

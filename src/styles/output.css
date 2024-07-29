@@ -587,29 +587,6 @@ video {
   flex-grow: 1;
 }
 
-.form__sections__section__input:focus {
-  border-color: var(--blue-color);
-}
-
-.form__sections__section--invalid .form__sections__section__input {
-  border-color: red;
-}
-
-.form__sections__section--invalid label {
-  color: red;
-}
-
-.form__sections__section--invalid label::after {
-  content: " *";
-  color: red;
-}
-
-.form__sections__section--invalid::after {
-  content: "Fill the input";
-  font-size: 0.8rem;
-  color: red;
-}
-
 .form__button-section {
   width: 100%;
 }
@@ -619,16 +596,6 @@ video {
   width: 100%;
   background-color: var(--blue-color);
   color: white;
-}
-
-.form-result--invisible {
-  opacity: 0;
-  transition: opacity 0.5s;
-}
-
-.form-result--visible {
-  opacity: 1;
-  transition: opacity 1s;
 }
 
 .fixed {
@@ -695,6 +662,21 @@ video {
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
 }
 
+.border-gray-700 {
+  --tw-border-opacity: 1;
+  border-color: rgb(55 65 81 / var(--tw-border-opacity));
+}
+
+.border-green-700 {
+  --tw-border-opacity: 1;
+  border-color: rgb(21 128 61 / var(--tw-border-opacity));
+}
+
+.border-red-700 {
+  --tw-border-opacity: 1;
+  border-color: rgb(185 28 28 / var(--tw-border-opacity));
+}
+
 .bg-gray-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(107 114 128 / var(--tw-bg-opacity));
@@ -759,6 +741,39 @@ video {
 
 :root {
   --blue-color: rgb(29 78 216);
+}
+
+.form__sections__section__input:focus {
+  border-color: var(--blue-color);
+}
+
+.form__sections__section--invalid .form__sections__section__input {
+  border-color: red;
+}
+
+.form__sections__section--invalid label {
+  color: red;
+}
+
+.form__sections__section--invalid label::after {
+  content: " *";
+  color: red;
+}
+
+.form__sections__section--invalid::after {
+  content: "Fill the input";
+  font-size: 0.8rem;
+  color: red;
+}
+
+.form-result--invisible {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.form-result--visible {
+  opacity: 1;
+  transition: opacity 1s;
 }
 
 .hover\:text-black:hover {
