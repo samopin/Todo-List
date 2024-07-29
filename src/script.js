@@ -96,6 +96,7 @@ form.addEventListener("submit", function (e) {
   const description = descriptionInput.value;
   // date value is string
   const dueDate = dateInput.value;
+  console.log(dueDate);
 
   // check for empty fields
   const changeSectionInvalid = function (element, action) {
@@ -121,3 +122,7 @@ form.addEventListener("submit", function (e) {
     .catch((err) => showFormResult("Unsuccessful", err.message));
   form.reset();
 });
+
+console.log(currentStringDate());
+// show todays date by default
+dateInput.valueAsDate = new Date();
