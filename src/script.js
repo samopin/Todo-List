@@ -1,10 +1,66 @@
 "use strict";
 
 const body = document.querySelector("body");
-const form = document.querySelector(".form");
-const titleInput = document.querySelector("#title-input");
-const descriptionInput = document.querySelector("#description-input");
-const dateInput = document.querySelector("#date-input");
+const content = document.querySelector(".content");
+const nav = document.querySelector(".nav");
+
+let form;
+let titleInput;
+let descriptionInput;
+let dateInput;
+
+const renderHome = function () {
+  console.log("being reset");
+  const homeHtml = `<form class="form">
+      <div class="form__sections">
+        <div class="form__sections__section">
+          <label for="title-input">Title</label>
+          <input
+            class="form__sections__section__input"
+            id="title-input"
+            type="text"
+            autocomplete="off"
+            placeholder="What will you do today?"
+          />
+        </div>
+        <div class="form__sections__section">
+          <label for="description-input">Description</label>
+          <textarea
+            class="form__sections__section__input"
+            type="text"
+            autocomplete="off"
+            id="description-input"
+            placeholder="Some information"
+          ></textarea>
+        </div>
+        <div class="form__sections__section">
+          <label for="date-input">Due Date</label>
+          <input
+            class="form__sections__section__input"
+            type="date"
+            autocomplete="off"
+            id="date-input"
+          />
+        </div>
+      </div>
+      <div class="form__button-section">
+        <input
+          class="form__button-section__button"
+          type="submit"
+          value="Submit"
+        />
+      </div>
+    </form>`;
+  content.innerHTML = homeHtml;
+  form = document.querySelector(".form");
+  titleInput = document.querySelector("#title-input");
+  descriptionInput = document.querySelector("#description-input");
+  dateInput = document.querySelector("#date-input");
+  // show todays date by default
+  dateInput.valueAsDate = new Date();
+};
+
+renderHome();
 
 class task {}
 
@@ -96,7 +152,6 @@ form.addEventListener("submit", function (e) {
   const description = descriptionInput.value;
   // date value is string
   const dueDate = dateInput.value;
-  console.log(dueDate);
 
   // check for empty fields
   const changeSectionInvalid = function (element, action) {
@@ -123,6 +178,13 @@ form.addEventListener("submit", function (e) {
   form.reset();
 });
 
-console.log(currentStringDate());
-// show todays date by default
-dateInput.valueAsDate = new Date();
+nav.addEventListener("click", function (e) {
+  if (!e.target.classList.contains("nav-link")) return;
+  console.log("pressed");
+  let id = e.target.id;
+  switch (id) {
+    case "nav__home":
+      renderHome();
+      break;
+  }
+});
