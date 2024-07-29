@@ -1,3 +1,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  :root {
+    --blue-color: rgb(29 78 216);
+  }
+}
+
+@layer components {
+  .form {
+    display: grid;
+    grid-template-rows: 4fr 1fr;
+    justify-content: center;
+    margin: auto;
+    margin-top: 60px;
+    width: 80vw;
+    height: fit-content;
+    gap: 20px;
+  }
+  .form__sections {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    /* gap with percentage makes overflow" */
+    gap: 20px;
+  }
+  .form__sections__section {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    justify-content: space-between;
+  }
+  .form__sections__section__input {
+    margin-left: 20px;
+    outline: none;
+    border: 2px solid black;
+    flex-grow: 1;
+  }
+  .form__sections__section__input:focus {
+    border-color: var(--blue-color);
+  }
+  .form__sections__section--invalid .form__sections__section__input {
+    border-color: red;
+  }
+  .form__sections__section--invalid label {
+    color: red;
+  }
+  .form__sections__section--invalid label::after {
+    content: " *";
+    color: red;
+  }
+  .form__sections__section--invalid::after {
+    content: "Fill the input";
+    font-size: 0.8rem;
+    color: red;
+  }
+  .form__button-section {
+    width: 100%;
+  }
+  .form__button-section__button {
+    border: 2px solid black;
+    width: 100%;
+    background-color: var(--blue-color);
+    color: white;
+  }
+}

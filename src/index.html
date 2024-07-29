@@ -7,6 +7,65 @@
     <title>Home</title>
   </head>
   <body>
-    <h1 class="text-3xl font-bold underline">Hello world!</h1>
+    <nav
+      class="flex w-[100vw] fixed top-0 h-10 border-y-4 border-solid border-black items-center"
+    >
+      <a class="text-blue-700 mx-2 hover:text-black" href="">Home</a>
+      <a class="text-blue-700 mx-2 hover:text-black" href="">Todos</a>
+    </nav>
+    <form action="" class="form">
+      <div class="form__sections">
+        <div class="form__sections__section form__sections__section--invalid">
+          <label for="title-input">Title</label>
+          <input
+            class="form__sections__section__input"
+            id="title-input"
+            type="text"
+            autocomplete="off"
+            placeholder="What will you do today?"
+            required
+          />
+        </div>
+        <div class="form__sections__section">
+          <label for="description-input">Description</label>
+          <input
+            class="form__sections__section__input"
+            type="text"
+            autocomplete="off"
+            id="description-input"
+            placeholder="Some information"
+          />
+        </div>
+        <div class="form__sections__section">
+          <label for="date-input">Due Date</label>
+          <input
+            class="form__sections__section__input"
+            type="date"
+            autocomplete="off"
+            id="date-input"
+          />
+        </div>
+      </div>
+      <div class="form__button-section">
+        <input
+          class="form__button-section__button"
+          type="submit"
+          value="Submit"
+        />
+      </div>
+    </form>
+    <div
+      id="form-result"
+      class="fixed bottom-2 pl-2 py-0.5 left-2 w-48 h-fit border-2 border-solid border-green-700 bg-green-500"
+    >
+      <h1 class="text-white text-sm" id="form-result-status">Successful</h1>
+      <p class="text-white text-sm" id="form-result-description">
+        The todo successfully submitted.
+      </p>
+    </div>
   </body>
+  <div id="form-container" class=""></div>
 </html>
+
+<!-- how to clean handle of invalid inputs -->
+<!-- placeholder for date input? -->

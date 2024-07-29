@@ -554,15 +554,180 @@ video {
   --tw-contain-style:  ;
 }
 
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
+.form {
+  display: grid;
+  grid-template-rows: 4fr 1fr;
+  justify-content: center;
+  margin: auto;
+  margin-top: 60px;
+  width: 80vw;
+  height: -moz-fit-content;
+  height: fit-content;
+  gap: 20px;
 }
 
-.font-bold {
-  font-weight: 700;
+.form__sections {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  /* gap with percentage makes overflow" */
+  gap: 20px;
 }
 
-.underline {
-  text-decoration-line: underline;
+.form__sections__section {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  justify-content: space-between;
+}
+
+.form__sections__section__input {
+  margin-left: 20px;
+  outline: none;
+  border: 2px solid black;
+  flex-grow: 1;
+}
+
+.form__sections__section__input:focus {
+  border-color: var(--blue-color);
+}
+
+.form__sections__section--invalid .form__sections__section__input {
+  border-color: red;
+}
+
+.form__sections__section--invalid label {
+  color: red;
+}
+
+.form__sections__section--invalid label::after {
+  content: " *";
+  color: red;
+}
+
+.form__sections__section--invalid::after {
+  content: "Fill the input";
+  font-size: 0.8rem;
+  color: red;
+}
+
+.form__button-section {
+  width: 100%;
+}
+
+.form__button-section__button {
+  border: 2px solid black;
+  width: 100%;
+  background-color: var(--blue-color);
+  color: white;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.bottom-2 {
+  bottom: 0.5rem;
+}
+
+.left-2 {
+  left: 0.5rem;
+}
+
+.top-0 {
+  top: 0px;
+}
+
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-16 {
+  height: 4rem;
+}
+
+.h-fit {
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.w-48 {
+  width: 12rem;
+}
+
+.w-\[100vw\] {
+  width: 100vw;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.border-2 {
+  border-width: 2px;
+}
+
+.border-y-4 {
+  border-top-width: 4px;
+  border-bottom-width: 4px;
+}
+
+.border-solid {
+  border-style: solid;
+}
+
+.border-black {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
+.border-green-700 {
+  --tw-border-opacity: 1;
+  border-color: rgb(21 128 61 / var(--tw-border-opacity));
+}
+
+.bg-green-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+}
+
+.py-0\.5 {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+
+.pl-2 {
+  padding-left: 0.5rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-blue-700 {
+  --tw-text-opacity: 1;
+  color: rgb(29 78 216 / var(--tw-text-opacity));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+:root {
+  --blue-color: rgb(29 78 216);
+}
+
+.hover\:text-black:hover {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
