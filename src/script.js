@@ -59,6 +59,21 @@ const renderHome = function () {
   dateInput.valueAsDate = new Date();
 };
 
+const getTodos = async function () {
+  console.log("hi");
+  const response = await fetch(
+    "https://60b77f8f17d1dc0017b8a2c4.mockapi.io/todos"
+  );
+  console.log(response);
+  const data = await response.json();
+  return data;
+};
+
+const renderTodos = function () {
+  console.log("rendering todos");
+  getTodos().then((data) => console.log(data));
+};
+
 renderHome();
 
 class task {}
@@ -185,6 +200,9 @@ nav.addEventListener("click", function (e) {
   switch (id) {
     case "nav__home":
       renderHome();
+      break;
+    case "nav__todos":
+      renderTodos();
       break;
   }
 });
