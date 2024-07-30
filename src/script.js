@@ -19,6 +19,41 @@ const updateUrl = function (url) {
   window.history.pushState("", "", url);
 };
 
+const submitForm = function (e) {
+  // avoid page reload
+  e.preventDefault();
+  const title = titleInput.value;
+  const description = descriptionInput.value;
+  // date value is string
+  const dueDate = dateInput.value;
+
+  // check for empty fields
+  const changeSectionInvalid = function (element, action) {
+    element
+      .closest(".form__sections__section")
+      .classList[action]("form__sections__section--invalid");
+    return true;
+  };
+  // if invalid add section invalid class else remove it
+  (!title && changeSectionInvalid(titleInput, "add")) ||
+    changeSectionInvalid(titleInput, "remove");
+  (!dueDate && changeSectionInvalid(dateInput, "add")) ||
+    changeSectionInvalid(dateInput, "remove");
+  // if any invalid return
+  if (!title || !dueDate) return;
+
+  //post the todo
+  const createdAt = currentStringDate();
+  const updatedAt = createdAt;
+  const checked = false;
+  console.log("bbb");
+  postTodo(title, description, dueDate, createdAt, updatedAt, checked)
+    .then((description) => showFormResult("Successful", description))
+    .catch((err) => showFormResult("Unsuccessful", err.message));
+  form.reset();
+  dateInput.valueAsDate = new Date();
+};
+
 const renderHome = function () {
   const homeHtml = `<form class="form">
       <div class="form__sections">
@@ -60,22 +95,15 @@ const renderHome = function () {
         />
       </div>
     </form>`;
-  updateUrl("/home");
   content.innerHTML = homeHtml;
   form = document.querySelector(".form");
+  form.addEventListener("submit", submitForm);
   titleInput = document.querySelector("#title-input");
   descriptionInput = document.querySelector("#description-input");
   dateInput = document.querySelector("#date-input");
   // show todays date by default
   dateInput.valueAsDate = new Date();
-};
-
-const getTodos = async function () {
-  const response = await fetch(
-    "https://60b77f8f17d1dc0017b8a2c4.mockapi.io/todos"
-  );
-  const data = await response.json();
-  return data;
+  updateUrl("/home");
 };
 
 renderHome();
@@ -132,72 +160,6 @@ const showFormResult = function (formStatus, formDescription) {
     );
   }, 5000);
 };
-
-const postTodo = async function (
-  title,
-  description,
-  dueDate,
-  createdAt,
-  updatedAt,
-  checked
-) {
-  let response = await fetch(
-    "https://60b77f8f17d1dc0017b8a2c4.mockapi.io/todos",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        title,
-        description,
-        dueDate,
-        createdAt,
-        updatedAt,
-        checked,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }
-  );
-  let data = await response.json();
-  if (response.ok) {
-    return "The todo successfully submitted";
-  }
-  return new Error("Todo did not submit");
-};
-
-form.addEventListener("submit", function (e) {
-  // prevent page reload
-  e.preventDefault();
-  const title = titleInput.value;
-  const description = descriptionInput.value;
-  // date value is string
-  const dueDate = dateInput.value;
-
-  // check for empty fields
-  const changeSectionInvalid = function (element, action) {
-    element
-      .closest(".form__sections__section")
-      .classList[action]("form__sections__section--invalid");
-    return true;
-  };
-  // if invalid add section invalid class else remove it
-  (!title && changeSectionInvalid(titleInput, "add")) ||
-    changeSectionInvalid(titleInput, "remove");
-  (!dueDate && changeSectionInvalid(dateInput, "add")) ||
-    changeSectionInvalid(dateInput, "remove");
-  // if any invalid return
-  if (!title || !dueDate) return;
-
-  //post the todo
-  const createdAt = currentStringDate();
-  const updatedAt = createdAt;
-  const checked = false;
-  postTodo(title, description, dueDate, createdAt, updatedAt, checked)
-    .then((description) => showFormResult("Successful", description))
-    .catch((err) => showFormResult("Unsuccessful", err.message));
-  form.reset();
-  dateInput.valueAsDate = new Date();
-});
 
 nav.addEventListener("click", function (e) {
   if (!e.target.classList.contains("nav-link")) return;
@@ -330,13 +292,16 @@ const renderPage = function (currentPage, todosPerPage) {
   //add listener for todo changing
   todosContainer.addEventListener("click", (e) => {
     let clickedElement = e.target;
-    console.log(clickedElement);
     let todo = clickedElement.closest("todo");
     if (clickedElement.classList.contains("todo__edit__img")) {
-      //TODO console.log("edit");
+      //TODO open edit page
     }
     if (clickedElement.classList.contains("todo__delete__img")) {
-      //TODO console.log("delete");
+      //TODO open delete modal
+    }
+    if (clickedElement.classList.contains("todo__checked")) {
+      console.log("checked");
+      //TODO mark checked / unchecked
     }
   });
 };
@@ -380,7 +345,7 @@ const parseEndpoints = function (endPointsString) {
 
 const updateContent = function (e) {
   e.preventDefault();
-  let currentUrl = window.location.href;
+  let currentUrl = window.location.pathname;
   let endPointsString = currentUrl.slice("http://127.0.0.1:5500/".length);
   let endpoints = parseEndpoints(endPointsString);
 
