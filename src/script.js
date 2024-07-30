@@ -10,6 +10,7 @@ let descriptionInput;
 let dateInput;
 let todosContainer;
 let todosPagination;
+let todosPaginationSelectors;
 
 let todos;
 const todosPerPage = 3;
@@ -201,12 +202,14 @@ nav.addEventListener("click", function (e) {
       renderHome();
       break;
     case "nav__todos":
-      renderTodos();
+      renderTodos(1);
       break;
   }
 });
 
 const renderTodo = function ({ title, description, dueDate, checked }) {
+  // only the date and not time
+  dueDate = dueDate.slice(0, 10);
   const todoHtml = `<div class="todo">
           <div class="todo__header">
             <div class="todo__checked ${
@@ -237,32 +240,81 @@ const renderTodo = function ({ title, description, dueDate, checked }) {
   todosContainer.insertAdjacentHTML("beforeend", todoHtml);
 };
 
+const renderPaginationSelector = function (value) {
+  const paginationSelector = `<div name=pagination-selector-${value} class="todos-pagination__selector">${value}</div>`;
+  todosPagination.insertAdjacentHTML("beforeend", paginationSelector);
+};
+
+const renderPagination = function (currentPage, totalPages) {
+  console.log(currentPage, totalPages);
+  todosPaginationSelectors = todosPagination.children;
+  // at most 7 pagination selector
+  let selectorAmount = Math.min(7, totalPages);
+  console.log("selectorAmount", selectorAmount);
+  if (selectorAmount < 7) {
+    for (let i = 1; i <= selectorAmount; i++) {
+      renderPaginationSelector(i);
+    }
+  }
+  if (selectorAmount >= 7) {
+    // one of the first pages
+    if (currentPage <= 4) {
+      console.log("less than 4");
+      for (let i = 1; i <= 5; i++) {
+        renderPaginationSelector(i);
+      }
+      renderPaginationSelector("...");
+      renderPaginationSelector(totalPages);
+    }
+    // one of the last pages
+    else if (totalPages - currentPage <= 4) {
+      renderPaginationSelector(1);
+      renderPaginationSelector("...");
+      for (let i = totalPages - 4; i <= totalPages; i++) {
+        renderPaginationSelector(i);
+      }
+    }
+    // one of the middle pages
+    else {
+      renderPaginationSelector(1);
+      renderPaginationSelector("...");
+      renderPaginationSelector(currentPage - 1);
+      renderPaginationSelector(currentPage);
+      renderPaginationSelector(currentPage + 1);
+      renderPaginationSelector("....");
+      renderPaginationSelector(totalPages);
+    }
+  }
+};
+
 const renderPage = function (currentPage, todosPerPage) {
   let pageTodos = todos.slice(
     todosPerPage * (currentPage - 1),
     todosPerPage * currentPage
   );
+
+  let pageUrl = `/#page=${currentPage}`;
+  // updating URL
+  window.history.pushState("", "", pageUrl);
   console.log(pageTodos);
+
   pageTodos.forEach((todoObject) => {
     renderTodo(todoObject);
   });
+  let totalTodos = todos.length;
+  let totalPages = Math.ceil(totalTodos / todosPerPage);
+  renderPagination(currentPage, totalPages);
+  //mark current page selector as active
+  let currentPageSelector = todosPagination.querySelector(
+    `[name=pagination-selector-${currentPage}]`
+  );
+  currentPageSelector.classList.add("todos-pagination__selector--active");
 };
 
-const renderTodos = function () {
+const renderTodos = function (currentPage) {
   const todosHtml = `<div class="todos-container">
       </div>
-      <div class="todos-pagination">
-        <div class="todos-pagination__selector">1</div>
-        <div class="todos-pagination__selector">...</div>
-        <div class="todos-pagination__selector">6</div>
-        <div
-          class="todos-pagination__selector todos-pagination__selector--active"
-        >
-          7
-        </div>
-        <div class="todos-pagination__selector">8</div>
-        <div class="todos-pagination__selector">...</div>
-        <div class="todos-pagination__selector">30</div>`;
+      <div class="todos-pagination"></div>`;
 
   getTodos().then((data) => {
     todos = data.sort((todo1, todo2) =>
@@ -270,7 +322,32 @@ const renderTodos = function () {
     );
     content.innerHTML = todosHtml;
     todosContainer = document.querySelector(".todos-container");
-    todosPagination = document.querySelector("todos-pagination");
-    renderPage(1, todosPerPage);
+    todosPagination = document.querySelector(".todos-pagination");
+    renderPage(currentPage, todosPerPage);
   });
 };
+
+const updateContent = function (e) {
+  e.preventDefault();
+  let currentUrl = window.location.href;
+  let queryParameters = currentUrl.slice("http://127.0.0.1:5500/".length);
+  let queryPairs = queryParameters.split("#");
+  queryPairs = queryPairs
+    .map((queryPair) => {
+      let queryPairParts = queryPair.split("=");
+      return {
+        key: queryPairParts[0],
+        value: Number(queryPairParts[1]),
+      };
+    })
+    .slice(1);
+  for (let { key, value } of queryPairs) {
+    switch (key) {
+      case "page":
+        renderTodos(value);
+    }
+  }
+};
+
+// listen for history changes
+window.addEventListener("hashchange", updateContent);

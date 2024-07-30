@@ -600,6 +600,10 @@ video {
   color: white;
 }
 
+.form__button-section__button:hover {
+  text-decoration: underline;
+}
+
 /* #endregion */
 
 /* #region todos */
