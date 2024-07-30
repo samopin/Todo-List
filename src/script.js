@@ -1,7 +1,7 @@
 "use strict";
 
 const body = document.querySelector("body");
-const content = document.querySelector(".content");
+const content = document.querySelector("#content");
 const nav = document.querySelector(".nav");
 
 let form;
@@ -14,6 +14,9 @@ let todosPaginationSelectors;
 
 let todos;
 const todosPerPage = 3;
+
+let removeFormResultTimeout;
+let fadeInFormResultTimeout;
 
 const updateUrl = function (url) {
   window.history.pushState("", "", url);
@@ -106,10 +109,6 @@ const renderHome = function () {
   updateUrl("/home");
 };
 
-renderHome();
-
-class task {}
-
 const currentStringDate = function () {
   const today = new Date();
   const yyyy = today.getFullYear();
@@ -123,6 +122,12 @@ const currentStringDate = function () {
 };
 
 const showFormResult = function (formStatus, formDescription) {
+  // remove the previous form result
+  if (body.lastElementChild.classList.contains("form-result")) {
+    body.lastElementChild.remove();
+    clearTimeout(removeFormResultTimeout);
+    clearTimeout(fadeInFormResultTimeout);
+  }
   let formColor, formBorderColor;
   switch (formStatus) {
     case "Successful":
@@ -146,19 +151,20 @@ const showFormResult = function (formStatus, formDescription) {
     </div>`;
   body.insertAdjacentHTML("beforeend", formResultHtml);
   // form result fade in
-  setTimeout(() => {
+  fadeInFormResultTimeout = setTimeout(() => {
     body.lastElementChild.classList.replace(
       "form-result--invisible",
       "form-result--visible"
     );
-  }, 1);
+  }, 500);
   // form result fade out
-  setTimeout(() => {
+  removeFormResultTimeout = setTimeout(() => {
     body.lastElementChild.classList.replace(
       "form-result--visible",
       "form-result--invisible"
     );
-  }, 5000);
+    setTimeout(() => body.lastElementChild.remove(), 1000);
+  }, 3000);
 };
 
 nav.addEventListener("click", function (e) {
@@ -174,13 +180,13 @@ nav.addEventListener("click", function (e) {
   }
 });
 
-const renderTodo = function ({ title, description, dueDate, checked }) {
+const renderTodo = function ({ id, title, description, dueDate, checked }) {
   // only the date and not time
   dueDate = dueDate.slice(0, 10);
-  const todoHtml = `<div class="todo">
+  const todoHtml = `<div id=todo-${id} class="todo">
           <div class="todo__header">
             <div class="todo__checked ${
-              checked ? "todo-checked--true" : ""
+              checked ? "todo__checked--true" : ""
             }"></div>
             <div class="todo__title text-lg">${title}</div>
             <div class="todo__dueDate text-lg">${dueDate}</div>
@@ -274,6 +280,7 @@ const renderPage = function (currentPage, todosPerPage) {
     todosPerPage * (currentPage - 1),
     todosPerPage * currentPage
   );
+  console.log(pageTodos);
 
   let pageUrl = `/todos#page=${currentPage}`;
   updateUrl(pageUrl);
@@ -292,7 +299,8 @@ const renderPage = function (currentPage, todosPerPage) {
   //add listener for todo changing
   todosContainer.addEventListener("click", (e) => {
     let clickedElement = e.target;
-    let todo = clickedElement.closest("todo");
+    let todo = clickedElement.closest(".todo");
+    let todoId = Number(todo.id.slice("todo-".length));
     if (clickedElement.classList.contains("todo__edit__img")) {
       //TODO open edit page
     }
@@ -300,8 +308,14 @@ const renderPage = function (currentPage, todosPerPage) {
       //TODO open delete modal
     }
     if (clickedElement.classList.contains("todo__checked")) {
-      console.log("checked");
-      //TODO mark checked / unchecked
+      let checked = clickedElement.classList.contains("todo__checked--true");
+      putTodo(todoId, !checked)
+        .then((description) => {
+          console.log(description);
+          showFormResult("Successful", description);
+          clickedElement.classList.toggle("todo__checked--true");
+        })
+        .catch((message) => showFormResult("Unsuccessful", message));
     }
   });
 };
@@ -367,3 +381,6 @@ const updateContent = function (e) {
 
 // listen for history changes
 window.addEventListener("hashchange", updateContent);
+
+// renderHome();
+renderTodos(1);

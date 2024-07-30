@@ -668,6 +668,10 @@ video {
   border: 3px solid black;
 }
 
+.todo__checked--true {
+  background-color: var(--blue-color);
+}
+
 .todo__change {
   display: flex;
   gap: 10px;
