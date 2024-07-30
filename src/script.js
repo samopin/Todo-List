@@ -15,6 +15,10 @@ let todosPaginationSelectors;
 let todos;
 const todosPerPage = 3;
 
+const updateUrl = function (url) {
+  window.history.pushState("", "", url);
+};
+
 const renderHome = function () {
   const homeHtml = `<form class="form">
       <div class="form__sections">
@@ -56,6 +60,7 @@ const renderHome = function () {
         />
       </div>
     </form>`;
+  updateUrl("/home");
   content.innerHTML = homeHtml;
   form = document.querySelector(".form");
   titleInput = document.querySelector("#title-input");
@@ -227,7 +232,7 @@ const renderTodo = function ({ title, description, dueDate, checked }) {
               </div>
               <div class="" class="todo__delete">
                 <img
-                  class="todo__edit__img"
+                  class="todo__delete__img"
                   src="../assets/delete-icon.png"
                   alt="Delete"
                 />
@@ -290,12 +295,17 @@ const renderPagination = function (currentPage, totalPages) {
   });
 };
 
+const renderPageNotFound = function () {
+  todosContainer.innerHTML = "Page not Found";
+};
+
 const renderPage = function (currentPage, todosPerPage) {
   let totalTodos = todos.length;
   let totalPages = Math.ceil(totalTodos / todosPerPage);
   // currentPage doesn't exist
   if (currentPage < 1 || currentPage > totalPages) {
-    //TODO renderPageNotFound();
+    todosPagination.remove();
+    renderPageNotFound();
     return;
   }
   let pageTodos = todos.slice(
@@ -304,19 +314,31 @@ const renderPage = function (currentPage, todosPerPage) {
   );
 
   let pageUrl = `/todos#page=${currentPage}`;
-  // updating URL
-  window.history.pushState("", "", pageUrl);
+  updateUrl(pageUrl);
 
   pageTodos.forEach((todoObject) => {
     renderTodo(todoObject);
   });
-
   renderPagination(currentPage, totalPages);
+
   //mark current page selector as active
   let currentPageSelector = todosPagination.querySelector(
     `[name=pagination-selector-${currentPage}]`
   );
   currentPageSelector.classList.add("todos-pagination__selector--active");
+
+  //add listener for todo changing
+  todosContainer.addEventListener("click", (e) => {
+    let clickedElement = e.target;
+    console.log(clickedElement);
+    let todo = clickedElement.closest("todo");
+    if (clickedElement.classList.contains("todo__edit__img")) {
+      //TODO console.log("edit");
+    }
+    if (clickedElement.classList.contains("todo__delete__img")) {
+      //TODO console.log("delete");
+    }
+  });
 };
 
 const renderTodos = function (currentPage) {
@@ -372,8 +394,6 @@ const updateContent = function (e) {
               break;
           }
         });
-        console.log(`couldn't find page`);
-        break;
       default:
         break;
     }

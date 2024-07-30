@@ -140,17 +140,18 @@
     margin-left: auto;
     visibility: hidden;
   }
+  .todo__edit__img,
+  .todo__delete__img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+  }
+
   .todo:hover .todo__change {
     visibility: visible;
     transition: visibility 0.25s;
   }
   .todo__edit {
-  }
-
-  .todo__edit__img {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
   }
 
   .todo__description {
