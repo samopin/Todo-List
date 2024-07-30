@@ -108,7 +108,7 @@ const showFormResult = function (formStatus, formDescription) {
       id="form-result"
       class="fixed form-result--invisible bottom-2 pl-2 py-0.5 left-2 w-48 h-fit border-2 border-solid ${formBorderColor} ${formColor}"
     >
-      <h1 class="text-white text-sm" id="form-result-status">${formStatus}</h1>
+      <h1 class="text-white font-bold text-sm" id="form-result-status">${formStatus}</h1>
       <p class="text-white text-sm" id="form-result-description">${formDescription}</p>
     </div>`;
   body.insertAdjacentHTML("beforeend", formResultHtml);
@@ -293,7 +293,7 @@ const renderPage = function (currentPage, todosPerPage) {
     todosPerPage * currentPage
   );
 
-  let pageUrl = `/#page=${currentPage}`;
+  let pageUrl = `/todos#page=${currentPage}`;
   // updating URL
   window.history.pushState("", "", pageUrl);
   console.log(pageTodos);
@@ -327,24 +327,52 @@ const renderTodos = function (currentPage) {
   });
 };
 
-const updateContent = function (e) {
-  e.preventDefault();
-  let currentUrl = window.location.href;
-  let queryParameters = currentUrl.slice("http://127.0.0.1:5500/".length);
-  let queryPairs = queryParameters.split("#");
-  queryPairs = queryPairs
-    .map((queryPair) => {
-      let queryPairParts = queryPair.split("=");
+const parseEndpoints = function (endPointsString) {
+  // console.log(endPointsString);
+  let endpoints = endPointsString.split("/");
+  endpoints.at(-1) == "" && (endpoints = endpoints.slice(0, -1));
+  endpoints.at(0) == "" && (endpoints = endpoints.slice(1));
+
+  // console.log(endpoints);
+
+  endpoints = endpoints.map((endpointString) => {
+    let [endpoint, ...queryParameters] = endpointString.split("#");
+    // console.log(endpoint, queryParameters);
+    queryParameters = queryParameters.map((queryParameterString) => {
+      let queryPairParts = queryParameterString.split("=");
       return {
         key: queryPairParts[0],
         value: Number(queryPairParts[1]),
       };
-    })
-    .slice(1);
-  for (let { key, value } of queryPairs) {
-    switch (key) {
-      case "page":
-        renderTodos(value);
+    });
+    return { endpoint, queryParameters };
+  });
+  // console.log(endpoints);
+  return endpoints;
+};
+
+const updateContent = function (e) {
+  e.preventDefault();
+  let currentUrl = window.location.href;
+  let endPointsString = currentUrl.slice("http://127.0.0.1:5500/".length);
+  let endpoints = parseEndpoints(endPointsString);
+
+  console.log(endpoints);
+  for (let { endpoint, queryParameters } of endpoints) {
+    console.log(endpoint);
+    switch (endpoint) {
+      case "todos":
+        queryParameters.forEach((queryParameter) => {
+          console.log(queryParameter);
+          switch (queryParameter.key) {
+            case "page":
+              renderTodos(queryParameter.value);
+              break;
+          }
+        });
+        return;
+      default:
+        console.log(`couldn't find page`);
     }
   }
 };
