@@ -236,7 +236,6 @@ const renderTodo = function ({ title, description, dueDate, checked }) {
           </div>
           <div class="todo__description">${description}</div>
         </div>`;
-  console.log(todosContainer);
   todosContainer.insertAdjacentHTML("beforeend", todoHtml);
 };
 
@@ -246,11 +245,9 @@ const renderPaginationSelector = function (value) {
 };
 
 const renderPagination = function (currentPage, totalPages) {
-  console.log(currentPage, totalPages);
   todosPaginationSelectors = todosPagination.children;
   // at most 7 pagination selector
   let selectorAmount = Math.min(7, totalPages);
-  console.log("selectorAmount", selectorAmount);
   if (selectorAmount < 7) {
     for (let i = 1; i <= selectorAmount; i++) {
       renderPaginationSelector(i);
@@ -259,7 +256,6 @@ const renderPagination = function (currentPage, totalPages) {
   if (selectorAmount >= 7) {
     // one of the first pages
     if (currentPage <= 4) {
-      console.log("less than 4");
       for (let i = 1; i <= 5; i++) {
         renderPaginationSelector(i);
       }
@@ -285,9 +281,23 @@ const renderPagination = function (currentPage, totalPages) {
       renderPaginationSelector(totalPages);
     }
   }
+  // add listener for pagination
+  todosPagination.addEventListener("click", (e) => {
+    // not a selector
+    if (!e.target.classList.contains("todos-pagination__selector")) return;
+    let pageNumber = Number(e.target.innerHTML);
+    if (!Number.isNaN()) renderTodos(pageNumber);
+  });
 };
 
 const renderPage = function (currentPage, todosPerPage) {
+  let totalTodos = todos.length;
+  let totalPages = Math.ceil(totalTodos / todosPerPage);
+  // currentPage doesn't exist
+  if (currentPage < 1 || currentPage > totalPages) {
+    //TODO renderPageNotFound();
+    return;
+  }
   let pageTodos = todos.slice(
     todosPerPage * (currentPage - 1),
     todosPerPage * currentPage
@@ -296,13 +306,11 @@ const renderPage = function (currentPage, todosPerPage) {
   let pageUrl = `/todos#page=${currentPage}`;
   // updating URL
   window.history.pushState("", "", pageUrl);
-  console.log(pageTodos);
 
   pageTodos.forEach((todoObject) => {
     renderTodo(todoObject);
   });
-  let totalTodos = todos.length;
-  let totalPages = Math.ceil(totalTodos / todosPerPage);
+
   renderPagination(currentPage, totalPages);
   //mark current page selector as active
   let currentPageSelector = todosPagination.querySelector(
@@ -328,16 +336,14 @@ const renderTodos = function (currentPage) {
 };
 
 const parseEndpoints = function (endPointsString) {
-  // console.log(endPointsString);
   let endpoints = endPointsString.split("/");
+
+  // remove fake endpoints created with / at start or end
   endpoints.at(-1) == "" && (endpoints = endpoints.slice(0, -1));
   endpoints.at(0) == "" && (endpoints = endpoints.slice(1));
 
-  // console.log(endpoints);
-
   endpoints = endpoints.map((endpointString) => {
     let [endpoint, ...queryParameters] = endpointString.split("#");
-    // console.log(endpoint, queryParameters);
     queryParameters = queryParameters.map((queryParameterString) => {
       let queryPairParts = queryParameterString.split("=");
       return {
@@ -347,7 +353,6 @@ const parseEndpoints = function (endPointsString) {
     });
     return { endpoint, queryParameters };
   });
-  // console.log(endpoints);
   return endpoints;
 };
 
@@ -357,22 +362,20 @@ const updateContent = function (e) {
   let endPointsString = currentUrl.slice("http://127.0.0.1:5500/".length);
   let endpoints = parseEndpoints(endPointsString);
 
-  console.log(endpoints);
   for (let { endpoint, queryParameters } of endpoints) {
-    console.log(endpoint);
     switch (endpoint) {
       case "todos":
         queryParameters.forEach((queryParameter) => {
-          console.log(queryParameter);
           switch (queryParameter.key) {
             case "page":
               renderTodos(queryParameter.value);
               break;
           }
         });
-        return;
-      default:
         console.log(`couldn't find page`);
+        break;
+      default:
+        break;
     }
   }
 };
