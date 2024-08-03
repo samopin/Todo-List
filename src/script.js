@@ -334,7 +334,7 @@ const renderPagination = function (currentPage, totalPages) {
       renderPaginationSelector(totalPages);
     }
     // one of the last pages
-    else if (totalPages - currentPage <= 4) {
+    else if (totalPages - currentPage <= 3) {
       renderPaginationSelector(1);
       renderPaginationSelector("...");
       for (let i = totalPages - 4; i <= totalPages; i++) {
@@ -462,16 +462,28 @@ const updateContent = function (e) {
   let currentUrl = window.location.href;
   let endPointsString = currentUrl.slice("http://127.0.0.1:5500/".length);
   let endpoints = parseEndpoints(endPointsString);
+  console.log(endpoints);
 
   for (let { endpoint, queryParameters } of endpoints) {
     switch (endpoint) {
+      case "home":
+        renderHome();
+        break;
       case "todos":
-        console.log("todos");
         queryParameters.forEach((queryParameter) => {
           switch (queryParameter.key) {
             case "page":
               renderTodos(queryParameter.value);
-              break;
+          }
+        });
+        break;
+      case "edit":
+        queryParameters.forEach((queryParameter) => {
+          switch (queryParameter.key) {
+            case "id":
+              getTodo(queryParameter.value)
+                .then((todo) => renderEdit(todo))
+                .catch((message) => showFormResult("Unsuccessful", message));
           }
         });
       default:
