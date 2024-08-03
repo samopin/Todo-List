@@ -77,10 +77,10 @@ const saveForm = function (e) {
     updatedAt,
   })
     .then((description) => {
-      showFormResult("Successful", description);
+      renderFormResult("Successful", description);
       renderHome();
     })
-    .catch((err) => showFormResult("Unsuccessful", err.message));
+    .catch((err) => renderFormResult("Unsuccessful", err.message));
 };
 
 const submitForm = function (e) {
@@ -100,8 +100,8 @@ const submitForm = function (e) {
     updatedAt,
     checked
   )
-    .then((description) => showFormResult("Successful", description))
-    .catch((err) => showFormResult("Unsuccessful", err.message));
+    .then((description) => renderFormResult("Successful", description))
+    .catch((err) => renderFormResult("Unsuccessful", err.message));
   form.reset();
   dateInput.valueAsDate = new Date();
 };
@@ -116,52 +116,6 @@ const currentStringDate = function () {
   if (mm < 10) mm = "0" + mm;
 
   return yyyy + "/" + mm + "/" + dd;
-};
-
-const showFormResult = function (formStatus, formDescription) {
-  // remove the previous form result
-  if (body.lastElementChild.classList.contains("form-result")) {
-    body.lastElementChild.remove();
-    clearTimeout(removeFormResultTimeout);
-    clearTimeout(fadeInFormResultTimeout);
-  }
-  let formColor, formBorderColor;
-  switch (formStatus) {
-    case "Successful":
-      formColor = "bg-green-500";
-      formBorderColor = "border-green-700";
-      break;
-    case "Unsuccessful":
-      formColor = "bg-red-500";
-      formBorderColor = "border-red-700";
-      break;
-    default:
-      formColor = "bg-gray-500";
-      formBorderColor = "border-gray-700";
-  }
-  const formResultHtml = `<div
-      id="form-result"
-      class="fixed form-result--invisible bottom-2 pl-2 py-0.5 left-2 w-48 h-fit border-2 border-solid ${formBorderColor} ${formColor}"
-    >
-      <h1 class="text-white font-bold text-sm" id="form-result-status">${formStatus}</h1>
-      <p class="text-white text-sm" id="form-result-description">${formDescription}</p>
-    </div>`;
-  body.insertAdjacentHTML("beforeend", formResultHtml);
-  // form result fade in
-  fadeInFormResultTimeout = setTimeout(() => {
-    body.lastElementChild.classList.replace(
-      "form-result--invisible",
-      "form-result--visible"
-    );
-  }, 500);
-  // form result fade out
-  removeFormResultTimeout = setTimeout(() => {
-    body.lastElementChild.classList.replace(
-      "form-result--visible",
-      "form-result--invisible"
-    );
-    setTimeout(() => body.lastElementChild.remove(), 1000);
-  }, 3000);
 };
 
 nav.addEventListener("click", function (e) {
@@ -184,13 +138,13 @@ const closeModal = function () {
 const removeTodo = function (id, currentPage) {
   deleteTodo(id)
     .then((description) => {
-      showFormResult("Successful", "Todo deleted successfully");
+      renderFormResult("Successful", "Todo deleted successfully");
       renderTodos(currentPage);
       closeModal();
     })
     .catch((err) => {
       closeModal();
-      showFormResult("Unsuccessful", err.message);
+      renderFormResult("Unsuccessful", err.message);
     });
 };
 
