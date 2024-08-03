@@ -22,9 +22,7 @@ const updateUrl = function (url) {
   window.history.pushState("", "", url);
 };
 
-const submitForm = function (e) {
-  // avoid page reload
-  e.preventDefault();
+const checkForm = function () {
   const title = titleInput.value;
   const description = descriptionInput.value;
   // date value is string
@@ -43,14 +41,46 @@ const submitForm = function (e) {
   (!dueDate && changeSectionInvalid(dateInput, "add")) ||
     changeSectionInvalid(dateInput, "remove");
   // if any invalid return
-  if (!title || !dueDate) return;
+  if (!title || !dueDate) return false;
 
-  //post the todo
+  return {
+    title,
+    description,
+    dueDate,
+  };
+};
+
+const saveForm = function (e) {
+  // avoid page reload
+  e.preventDefault();
+  let todo = checkForm();
+  if (!todo) return;
+  const updatedAt = currentStringDate();
+  putTodo(todo.title, todo.description, todo.dueDate, updatedAt)
+    .then((description) => {
+      showFormResult("Successful", description);
+      renderHome();
+    })
+    .catch((err) => showFormResult("Unsuccessful", err.message));
+};
+
+const submitForm = function (e) {
+  // avoid page reload
+  e.preventDefault();
+  let todo = checkForm();
+  if (!todo) return;
   const createdAt = currentStringDate();
   const updatedAt = createdAt;
   const checked = false;
-  console.log("bbb");
-  postTodo(title, description, dueDate, createdAt, updatedAt, checked)
+  //post the todo
+  postTodo(
+    todo.title,
+    todo.description,
+    todo.dueDate,
+    createdAt,
+    updatedAt,
+    checked
+  )
     .then((description) => showFormResult("Successful", description))
     .catch((err) => showFormResult("Unsuccessful", err.message));
   form.reset();
@@ -107,6 +137,58 @@ const renderHome = function () {
   // show todays date by default
   dateInput.valueAsDate = new Date();
   updateUrl("/home");
+};
+
+const renderEdit = function ({ id, title, description, dueDate }) {
+  const homeHtml = `<form class="form">
+      <div class="form__sections">
+        <div class="form__sections__section">
+          <label for="title-input">Title</label>
+          <input
+            class="form__sections__section__input"
+            id="title-input"
+            type="text"
+            autocomplete="off"
+            placeholder="What will you do today?"
+            value="${title}"
+          />
+        </div>
+        <div class="form__sections__section">
+          <label for="description-input">Description</label>
+          <textarea
+            class="form__sections__section__input"
+            type="text"
+            autocomplete="off"
+            id="description-input"
+            placeholder="Some information"
+          >${description}</textarea>
+        </div>
+        <div class="form__sections__section">
+          <label for="date-input">Due Date</label>
+          <input
+            class="form__sections__section__input"
+            type="date"
+            autocomplete="off"
+            id="date-input"
+            value="${dueDate}"
+          />
+        </div>
+      </div>
+      <div class="form__button-section">
+        <input
+          class="form__button-section__button"
+          type="submit"
+          value="Submit"
+        />
+      </div>
+    </form>`;
+  content.innerHTML = homeHtml;
+  form = document.querySelector(".form");
+  form.addEventListener("submit", saveForm);
+  titleInput = document.querySelector("#title-input");
+  descriptionInput = document.querySelector("#description-input");
+  dateInput = document.querySelector("#date-input");
+  updateUrl(`/edit?id=${id}`);
 };
 
 const currentStringDate = function () {
@@ -302,7 +384,9 @@ const renderPage = function (currentPage, todosPerPage) {
     let todo = clickedElement.closest(".todo");
     let todoId = Number(todo.id.slice("todo-".length));
     if (clickedElement.classList.contains("todo__edit__img")) {
-      //TODO open edit page
+      getTodo(todoId)
+        .then((todo) => renderEdit(todo))
+        .catch((message) => showFormResult("Unsuccessful", message));
     }
     if (clickedElement.classList.contains("todo__delete__img")) {
       //TODO open delete modal
@@ -338,7 +422,6 @@ const renderTodos = function (currentPage) {
 
 const parseEndpoints = function (endPointsString) {
   let endpoints = endPointsString.split("/");
-
   // remove fake endpoints created with / at start or end
   endpoints.at(-1) == "" && (endpoints = endpoints.slice(0, -1));
   endpoints.at(0) == "" && (endpoints = endpoints.slice(1));
@@ -358,14 +441,16 @@ const parseEndpoints = function (endPointsString) {
 };
 
 const updateContent = function (e) {
+  console.log("changed");
   e.preventDefault();
-  let currentUrl = window.location.pathname;
+  let currentUrl = window.location.href;
   let endPointsString = currentUrl.slice("http://127.0.0.1:5500/".length);
   let endpoints = parseEndpoints(endPointsString);
 
   for (let { endpoint, queryParameters } of endpoints) {
     switch (endpoint) {
       case "todos":
+        console.log("todos");
         queryParameters.forEach((queryParameter) => {
           switch (queryParameter.key) {
             case "page":

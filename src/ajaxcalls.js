@@ -6,6 +6,14 @@ const getTodos = async function () {
   return data;
 };
 
+const getTodo = async function (todoId) {
+  const response = await fetch(
+    `https://60b77f8f17d1dc0017b8a2c4.mockapi.io/todos/${todoId}`
+  );
+  const data = await response.json();
+  return data;
+};
+
 const postTodo = async function (
   title,
   description,
