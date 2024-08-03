@@ -55,8 +55,24 @@ const saveForm = function (e) {
   e.preventDefault();
   let todo = checkForm();
   if (!todo) return;
+  //TODO get todoId and pass to putTodo
+  let currentUrl = window.location.href;
+  let endPointsString = currentUrl.slice("http://127.0.0.1:5500/".length);
+  let endpoints = parseEndpoints(endPointsString);
+  let todoId = endpoints
+    .filter((entry) => entry.endpoint == "edit")[0]
+    .queryParameters.filter(
+      (queryParameter) => queryParameter.key == "id"
+    )[0].value;
+
   const updatedAt = currentStringDate();
-  putTodo(todo.title, todo.description, todo.dueDate, updatedAt)
+  putTodo({
+    id: todoId,
+    title: todo.title,
+    description: todo.description,
+    dueDate: todo.dueDate,
+    updatedAt,
+  })
     .then((description) => {
       showFormResult("Successful", description);
       renderHome();
@@ -188,7 +204,7 @@ const renderEdit = function ({ id, title, description, dueDate }) {
   titleInput = document.querySelector("#title-input");
   descriptionInput = document.querySelector("#description-input");
   dateInput = document.querySelector("#date-input");
-  updateUrl(`/edit?id=${id}`);
+  updateUrl(`/edit#id=${id}`);
 };
 
 const currentStringDate = function () {
@@ -393,7 +409,7 @@ const renderPage = function (currentPage, todosPerPage) {
     }
     if (clickedElement.classList.contains("todo__checked")) {
       let checked = clickedElement.classList.contains("todo__checked--true");
-      putTodo(todoId, !checked)
+      putTodo({ id: todoId, checked: !checked })
         .then((description) => {
           console.log(description);
           showFormResult("Successful", description);

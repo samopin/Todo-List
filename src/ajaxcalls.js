@@ -46,25 +46,12 @@ const postTodo = async function (
   return Promise.reject("Todo did not submit");
 };
 
-const putTodo = async function (
-  id,
-  checked,
-  title,
-  description,
-  dueDate,
-  updatedAt
-) {
+const putTodo = async function (todo) {
   let response = await fetch(
-    `https://60b77f8f17d1dc0017b8a2c4.mockapi.io/todos/${id}`,
+    `https://60b77f8f17d1dc0017b8a2c4.mockapi.io/todos/${todo.id}`,
     {
       method: "PUT",
-      body: JSON.stringify({
-        checked,
-        title,
-        description,
-        dueDate,
-        updatedAt,
-      }),
+      body: JSON.stringify(todo),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
