@@ -692,7 +692,8 @@ video {
 }
 
 .todo__edit__img,
-  .todo__delete__img {
+  .todo__delete__img,
+  .todo__cancel__img {
   width: 22px;
   height: 22px;
   -o-object-fit: contain;
@@ -713,6 +714,18 @@ video {
 }
 
 .todo__description {
+  margin-top: 20px;
+  height: 100%;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60vw;
+  height: 50vh;
+  box-shadow: 6px 6px 20px black;
 }
 
 .fixed {
