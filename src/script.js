@@ -137,11 +137,10 @@ const renderHome = function () {
         </div>
       </div>
       <div class="form__button-section">
-        <input
+        <button
           class="form__button-section__button"
           type="submit"
-          value="Submit"
-        />
+        >Submit</button>
       </div>
     </form>`;
   content.innerHTML = homeHtml;
@@ -191,11 +190,10 @@ const renderEdit = function ({ id, title, description, dueDate }) {
         </div>
       </div>
       <div class="form__button-section">
-        <input
+        <button
           class="form__button-section__button"
           type="submit"
-          value="Submit"
-        />
+        >Save</button>
       </div>
     </form>`;
   content.innerHTML = homeHtml;
