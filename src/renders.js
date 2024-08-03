@@ -111,20 +111,20 @@ const renderTodo = function ({ id, title, description, dueDate, checked }) {
               <div class="todo__title text-lg">${title}</div>
               <div class="todo__dueDate text-lg">${dueDate}</div>
               <div class="todo__change">
-                <div class="todo__edit">
+                <button class="todo__edit">
                   <img
                     class="todo__edit__img"
                     src="../assets/edit-icon.png"
                     alt="Edit"
                   />
-                </div>
-                <div class="" class="todo__delete">
+                </button>
+                <button class="" class="todo__delete">
                   <img
                     class="todo__delete__img"
                     src="../assets/delete-icon.png"
                     alt="Delete"
                   />
-                </div>
+                </button>
               </div>
             </div>
             <div class="todo__description">${description}</div>
@@ -148,31 +148,31 @@ const renderDelete = function (
               <div class="todo__dueDate text-lg">${dueDate}</div>
               <div class="todo__change">
                 <b>Delete Todo</b>
-                <div class="todo__cancel-delete">
+                <button class="todo__cancel-delete">
                   <img
                     class="todo__cancel__img"
                     src="../assets/cancel-icon.png"
                     alt="Cancel"
                   />
-                </div>
-                <div class="todo__confirm-delete">
+                </button>
+                <button class="todo__confirm-delete">
                   <img
                     class="todo__delete__img"
                     src="../assets/delete-icon.png"
                     alt="Delete"
                   />
-                </div>
+                </button>
               </div>
             </div>
             <div class="todo__description">${description}</div>
           </div>
         </div>`;
-  // body.style.filter = "blur(2px)";
+  body.style.filter = "blur(2px)";
   body.insertAdjacentHTML("beforeend", deleteModalHtml);
   deleteModal = body.lastElementChild;
   deleteModalConfirmButton = deleteModal.querySelector(".todo__delete__img");
   deleteModalCancelButton = deleteModal.querySelector(".todo__cancel__img");
-  deleteModal.style.filter = "none";
+  deleteModal.style.filter = "blur(0px) ";
   deleteModalConfirmButton.addEventListener("click", () =>
     removeTodo(id, currentPage)
   );
@@ -180,7 +180,7 @@ const renderDelete = function (
 };
 
 const renderPaginationSelector = function (value) {
-  const paginationSelector = `<div name=pagination-selector-${value} class="todos-pagination__selector">${value}</div>`;
+  const paginationSelector = `<button name=pagination-selector-${value} class="todos-pagination__selector">${value}</button>`;
   todosPagination.insertAdjacentHTML("beforeend", paginationSelector);
 };
 
