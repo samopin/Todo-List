@@ -308,6 +308,44 @@ const renderTodo = function ({ id, title, description, dueDate, checked }) {
   todosContainer.insertAdjacentHTML("beforeend", todoHtml);
 };
 
+const renderDelete = function ({ id, title, description, dueDate, checked }) {
+  let deleteModal = `<div class="modal-container">
+        <div class="modal-mask"></div>
+        <div id="todo-${id}" class="todo modal">
+          <div class="todo__header">
+            <div class="todo__checked"></div>
+            <!-- <div class="todo__checked ${
+              checked ? "todo__checked--true" : ""
+            }"></div> -->
+            <div class="todo__title text-lg">${title}</div>
+            <div class="todo__dueDate text-lg">${dueDate}</div>
+            <div class="todo__change">
+              <b>Delete Todo</b>
+              <div class="" class="todo__cancel-delete">
+                <img
+                  class="todo__cancel__img"
+                  src="../assets/cancel-icon.png"
+                  alt="Cancel"
+                />
+              </div>
+              <div class="" class="todo__confirm-delete">
+                <img
+                  class="todo__delete__img"
+                  src="../assets/delete-icon.png"
+                  alt="Delete"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="todo__description">${description}</div>
+        </div>
+      </div>`;
+  body.style.filter = "blur(2px)";
+  body.insertAdjacentHTML("beforeend", deleteModal);
+  body.lastElementChild.style.filter = "none";
+  console.log(content.lastElementChild);
+};
+
 const renderPaginationSelector = function (value) {
   const paginationSelector = `<div name=pagination-selector-${value} class="todos-pagination__selector">${value}</div>`;
   todosPagination.insertAdjacentHTML("beforeend", paginationSelector);
@@ -403,7 +441,9 @@ const renderPage = function (currentPage, todosPerPage) {
         .catch((message) => showFormResult("Unsuccessful", message));
     }
     if (clickedElement.classList.contains("todo__delete__img")) {
-      //TODO open delete modal
+      getTodo(todoId)
+        .then((todo) => renderDelete(todo))
+        .catch((message) => showFormResult("Unsuccessful", message));
     }
     if (clickedElement.classList.contains("todo__checked")) {
       let checked = clickedElement.classList.contains("todo__checked--true");

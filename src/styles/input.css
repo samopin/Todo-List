@@ -41,7 +41,6 @@
     grid-template-rows: 4fr 1fr;
     justify-content: center;
     margin: auto;
-    margin-top: 60px;
     width: 80vw;
     height: fit-content;
     gap: 20px;
@@ -81,7 +80,6 @@
   /* #region todos */
   .todos-container {
     margin: auto;
-    margin-top: 60px;
     display: flex;
     flex-direction: column;
     gap: 5%;
@@ -161,13 +159,33 @@
     height: 100%;
   }
 
+  .modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+  }
+
+  .modal-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+  }
+
   .modal {
     position: fixed;
+    z-index: 1000;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 60vw;
     height: 50vh;
+    background-color: white;
     box-shadow: 6px 6px 20px black;
   }
 }
