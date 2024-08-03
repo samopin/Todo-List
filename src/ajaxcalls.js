@@ -10,7 +10,6 @@ const getTodo = async function (todoId) {
   const response = await fetch(
     `https://60b77f8f17d1dc0017b8a2c4.mockapi.io/todos/${todoId}`
   );
-  console.log(response);
   const data = await response.json();
   if (response.ok) {
     return data;
@@ -61,10 +60,23 @@ const putTodo = async function (todo) {
       },
     }
   );
-  console.log(response);
   let data = await response.json();
   if (response.ok) {
     return "The todo successfully edited";
   }
   return Promise.reject("Todo did not edit");
+};
+
+const deleteTodo = async function (todoId) {
+  let response = await fetch(
+    `https://60b77f8f17d1dc0017b8a2c4.mockapi.io/todos/${todoId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }
+  );
+  let data = response.json();
+  return data;
 };

@@ -11,6 +11,9 @@ let dateInput;
 let todosContainer;
 let todosPagination;
 let todosPaginationSelectors;
+let deleteModal;
+let deleteModalConfirmButton;
+let deleteModalCancelButton;
 
 let todos;
 const todosPerPage = 3;
@@ -308,8 +311,28 @@ const renderTodo = function ({ id, title, description, dueDate, checked }) {
   todosContainer.insertAdjacentHTML("beforeend", todoHtml);
 };
 
-const renderDelete = function ({ id, title, description, dueDate, checked }) {
-  let deleteModal = `<div class="modal-container">
+const closeModal = function () {
+  deleteModal.remove();
+};
+
+const removeTodo = function (id, currentPage) {
+  deleteTodo(id)
+    .then((description) => {
+      showFormResult("Successful", description);
+      renderTodos(currentPage);
+      closeModal();
+    })
+    .catch((err) => {
+      closeModal();
+      showFormResult("Unsuccessful", err.message);
+    });
+};
+
+const renderDelete = function (
+  { id, title, description, dueDate, checked },
+  currentPage
+) {
+  const deleteModalHtml = `<div class="modal-container">
         <div class="modal-mask"></div>
         <div id="todo-${id}" class="todo modal">
           <div class="todo__header">
@@ -321,14 +344,14 @@ const renderDelete = function ({ id, title, description, dueDate, checked }) {
             <div class="todo__dueDate text-lg">${dueDate}</div>
             <div class="todo__change">
               <b>Delete Todo</b>
-              <div class="" class="todo__cancel-delete">
+              <div class="todo__cancel-delete">
                 <img
                   class="todo__cancel__img"
                   src="../assets/cancel-icon.png"
                   alt="Cancel"
                 />
               </div>
-              <div class="" class="todo__confirm-delete">
+              <div class="todo__confirm-delete">
                 <img
                   class="todo__delete__img"
                   src="../assets/delete-icon.png"
@@ -340,10 +363,16 @@ const renderDelete = function ({ id, title, description, dueDate, checked }) {
           <div class="todo__description">${description}</div>
         </div>
       </div>`;
-  body.style.filter = "blur(2px)";
-  body.insertAdjacentHTML("beforeend", deleteModal);
-  body.lastElementChild.style.filter = "none";
-  console.log(content.lastElementChild);
+  // body.style.filter = "blur(2px)";
+  body.insertAdjacentHTML("beforeend", deleteModalHtml);
+  deleteModal = body.lastElementChild;
+  deleteModalConfirmButton = deleteModal.querySelector(".todo__delete__img");
+  deleteModalCancelButton = deleteModal.querySelector(".todo__cancel__img");
+  deleteModal.style.filter = "none";
+  deleteModalConfirmButton.addEventListener("click", () =>
+    removeTodo(id, currentPage)
+  );
+  deleteModalCancelButton.addEventListener("click", closeModal);
 };
 
 const renderPaginationSelector = function (value) {
@@ -442,7 +471,7 @@ const renderPage = function (currentPage, todosPerPage) {
     }
     if (clickedElement.classList.contains("todo__delete__img")) {
       getTodo(todoId)
-        .then((todo) => renderDelete(todo))
+        .then((todo) => renderDelete(todo, currentPage))
         .catch((message) => showFormResult("Unsuccessful", message));
     }
     if (clickedElement.classList.contains("todo__checked")) {
