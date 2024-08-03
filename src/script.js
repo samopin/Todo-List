@@ -524,7 +524,6 @@ const parseEndpoints = function (endPointsString) {
 };
 
 const updateContent = function (e) {
-  console.log("changed");
   e.preventDefault();
   let currentUrl = window.location.href;
   let endPointsString = currentUrl.slice("http://127.0.0.1:5500/".length);
