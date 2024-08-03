@@ -10,8 +10,12 @@ const getTodo = async function (todoId) {
   const response = await fetch(
     `https://60b77f8f17d1dc0017b8a2c4.mockapi.io/todos/${todoId}`
   );
+  console.log(response);
   const data = await response.json();
-  return data;
+  if (response.ok) {
+    return data;
+  }
+  return Promise.reject("Todo does not exist");
 };
 
 const postTodo = async function (
@@ -59,7 +63,6 @@ const putTodo = async function (todo) {
   );
   console.log(response);
   let data = await response.json();
-  console.log(data);
   if (response.ok) {
     return "The todo successfully edited";
   }

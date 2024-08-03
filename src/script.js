@@ -483,7 +483,9 @@ const updateContent = function (e) {
             case "id":
               getTodo(queryParameter.value)
                 .then((todo) => renderEdit(todo))
-                .catch((message) => showFormResult("Unsuccessful", message));
+                .catch((message) => {
+                  renderHome();
+                });
           }
         });
       default:
