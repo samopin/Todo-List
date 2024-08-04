@@ -233,7 +233,7 @@ const renderPagination = function (currentPage, totalPages) {
 
 const renderPageNotFound = function () {
   content.innerHTML = "Page not Found";
-  updateUrl("/#/not-found");
+  updateUrl("/#/notFound");
 };
 
 const renderPage = function (currentPage, todosPerPage) {
@@ -249,7 +249,6 @@ const renderPage = function (currentPage, todosPerPage) {
     todosPerPage * (currentPage - 1),
     todosPerPage * currentPage
   );
-  console.log(pageTodos);
 
   let pageUrl = `/#/todos?page=${currentPage}`;
   updateUrl(pageUrl);
@@ -293,7 +292,7 @@ const renderPage = function (currentPage, todosPerPage) {
   });
 };
 
-const renderTodos = function (currentPage) {
+const renderTodos = function (currentPage = 1) {
   const todosHtml = `<div class="todos-container">
         </div>
         <div class="todos-pagination"></div>`;

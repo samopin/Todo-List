@@ -165,7 +165,8 @@ const parseEndpoints = function (endPointsString) {
     });
     return { endpoint, queryParameters };
   });
-  return endpoints;
+  // remove the first # route
+  return endpoints.slice(1);
 };
 
 const updateContent = function (e) {
@@ -173,7 +174,6 @@ const updateContent = function (e) {
   let currentUrl = window.location.href;
   let endPointsString = currentUrl.slice("http://127.0.0.1:5500/".length);
   let endpoints = parseEndpoints(endPointsString);
-  console.log(endpoints);
 
   for (let { endpoint, queryParameters } of endpoints) {
     switch (endpoint) {
@@ -181,13 +181,18 @@ const updateContent = function (e) {
         renderHome();
         break;
       case "todos":
+        // if no parameter is specified
+        if (queryParameters.length == 0) {
+          renderTodos();
+          break;
+        }
         queryParameters.forEach((queryParameter) => {
           switch (queryParameter.key) {
             case "page":
               renderTodos(queryParameter.value);
+              break;
           }
         });
-        break;
       case "edit":
         queryParameters.forEach((queryParameter) => {
           switch (queryParameter.key) {
@@ -199,6 +204,7 @@ const updateContent = function (e) {
                 });
           }
         });
+        break;
       default:
         renderPageNotFound();
         break;
@@ -209,5 +215,5 @@ const updateContent = function (e) {
 // listen for history changes
 window.addEventListener("hashchange", updateContent);
 
-// renderHome();
-renderTodos(1);
+renderHome();
+// renderTodos();
