@@ -232,7 +232,8 @@ const renderPagination = function (currentPage, totalPages) {
 };
 
 const renderPageNotFound = function () {
-  todosContainer.innerHTML = "Page not Found";
+  content.innerHTML = "Page not Found";
+  updateUrl("/#/not-found");
 };
 
 const renderPage = function (currentPage, todosPerPage) {

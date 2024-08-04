@@ -200,6 +200,7 @@ const updateContent = function (e) {
           }
         });
       default:
+        renderPageNotFound();
         break;
     }
   }
