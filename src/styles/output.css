@@ -637,7 +637,12 @@ video {
   font-weight: bold;
 }
 
-.todos-pagination__selector--active {
+.todos-pagination__selector:hover {
+  background-color: rgb(206, 206, 206);
+}
+
+.todos-pagination__selector--active,
+  .todos-pagination__selector--active:hover {
   background-color: var(--blue-color);
   color: white;
 }
@@ -732,6 +737,8 @@ video {
   z-index: 100;
   width: 100%;
   height: 100%;
+  background-color: black;
+  opacity: 0.4;
 }
 
 .modal {
@@ -887,11 +894,6 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.blur {
-  --tw-blur: blur(8px);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .filter {

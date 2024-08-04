@@ -114,14 +114,14 @@ const renderTodo = function ({ id, title, description, dueDate, checked }) {
                 <button class="todo__edit">
                   <img
                     class="todo__edit__img"
-                    src="../assets/edit-icon.png"
+                    src="assets/edit-icon.png"
                     alt="Edit"
                   />
                 </button>
-                <button class="" class="todo__delete">
+                <button class="todo__delete">
                   <img
                     class="todo__delete__img"
-                    src="../assets/delete-icon.png"
+                    src="assets/delete-icon.png"
                     alt="Delete"
                   />
                 </button>
@@ -167,12 +167,10 @@ const renderDelete = function (
             <div class="todo__description">${description}</div>
           </div>
         </div>`;
-  body.style.filter = "blur(2px)";
   body.insertAdjacentHTML("beforeend", deleteModalHtml);
   deleteModal = body.lastElementChild;
   deleteModalConfirmButton = deleteModal.querySelector(".todo__delete__img");
   deleteModalCancelButton = deleteModal.querySelector(".todo__cancel__img");
-  deleteModal.style.filter = "blur(0px) ";
   deleteModalConfirmButton.addEventListener("click", () =>
     removeTodo(id, currentPage)
   );
@@ -226,7 +224,7 @@ const renderPagination = function (currentPage, totalPages) {
     // not a selector
     if (!e.target.classList.contains("todos-pagination__selector")) return;
     let pageNumber = Number(e.target.innerHTML);
-    if (!Number.isNaN()) renderTodos(pageNumber);
+    if (!Number.isNaN(pageNumber)) renderTodos(pageNumber);
   });
 };
 
