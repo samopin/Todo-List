@@ -48,6 +48,7 @@ const renderHome = function () {
   // show todays date by default
   dateInput.valueAsDate = new Date();
   updateUrl("/#/home");
+  document.title = "Home";
 };
 
 const renderEdit = function ({ id, title, description, dueDate }) {
@@ -100,6 +101,7 @@ const renderEdit = function ({ id, title, description, dueDate }) {
   descriptionInput = document.querySelector("#description-input");
   dateInput = document.querySelector("#date-input");
   updateUrl(`/#/edit?id=${id}`);
+  document.title = "Edit";
 };
 
 const renderTodo = function ({ id, title, description, dueDate, checked }) {
@@ -234,6 +236,7 @@ const renderPagination = function (currentPage, totalPages) {
 const renderPageNotFound = function () {
   content.innerHTML = "Page not Found";
   updateUrl("/#/notFound");
+  document.title = "Not Found";
 };
 
 const renderPage = function (currentPage, todosPerPage) {
@@ -249,9 +252,6 @@ const renderPage = function (currentPage, todosPerPage) {
     todosPerPage * (currentPage - 1),
     todosPerPage * currentPage
   );
-
-  let pageUrl = `/#/todos?page=${currentPage}`;
-  updateUrl(pageUrl);
 
   pageTodos.forEach((todoObject) => {
     renderTodo(todoObject);
@@ -290,6 +290,10 @@ const renderPage = function (currentPage, todosPerPage) {
         .catch((message) => renderFormResult("Unsuccessful", message));
     }
   });
+
+  let pageUrl = `/#/todos?page=${currentPage}`;
+  updateUrl(pageUrl);
+  document.title = `Todos Page ${currentPage}`;
 };
 
 const renderTodos = function (currentPage = 1) {
