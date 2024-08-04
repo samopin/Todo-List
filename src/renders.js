@@ -105,9 +105,9 @@ const renderTodo = function ({ id, title, description, dueDate, checked }) {
   dueDate = dueDate.slice(0, 10);
   const todoHtml = `<div id=todo-${id} class="todo">
             <div class="todo__header">
-              <div class="todo__checked ${
+              <button class="todo__checked ${
                 checked ? "todo__checked--true" : ""
-              }"></div>
+              }"></button>
               <div class="todo__title text-lg">${title}</div>
               <div class="todo__dueDate text-lg">${dueDate}</div>
               <div class="todo__change">
@@ -269,22 +269,22 @@ const renderPage = function (currentPage, todosPerPage) {
     if (clickedElement.classList.contains("todo__edit__img")) {
       getTodo(todoId)
         .then((todo) => renderEdit(todo))
-        .catch((message) => showFormResult("Unsuccessful", message));
+        .catch((message) => renderFormResult("Unsuccessful", message));
     }
     if (clickedElement.classList.contains("todo__delete__img")) {
       getTodo(todoId)
         .then((todo) => renderDelete(todo, currentPage))
-        .catch((message) => showFormResult("Unsuccessful", message));
+        .catch((message) => renderFormResult("Unsuccessful", message));
     }
     if (clickedElement.classList.contains("todo__checked")) {
       let checked = clickedElement.classList.contains("todo__checked--true");
       putTodo({ id: todoId, checked: !checked })
         .then((description) => {
           console.log(description);
-          showFormResult("Successful", description);
+          renderFormResult("Successful", description);
           clickedElement.classList.toggle("todo__checked--true");
         })
-        .catch((message) => showFormResult("Unsuccessful", message));
+        .catch((message) => renderFormResult("Unsuccessful", message));
     }
   });
 };
