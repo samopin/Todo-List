@@ -42,11 +42,12 @@ const renderHome = function () {
   form = document.querySelector(".form");
   form.addEventListener("submit", submitForm);
   titleInput = document.querySelector("#title-input");
+  titleInput.focus();
   descriptionInput = document.querySelector("#description-input");
   dateInput = document.querySelector("#date-input");
   // show todays date by default
   dateInput.valueAsDate = new Date();
-  updateUrl("/home");
+  updateUrl("/#/home");
 };
 
 const renderEdit = function ({ id, title, description, dueDate }) {
@@ -95,9 +96,10 @@ const renderEdit = function ({ id, title, description, dueDate }) {
   form = document.querySelector(".form");
   form.addEventListener("submit", saveForm);
   titleInput = document.querySelector("#title-input");
+  titleInput.focus();
   descriptionInput = document.querySelector("#description-input");
   dateInput = document.querySelector("#date-input");
-  updateUrl(`/edit#id=${id}`);
+  updateUrl(`/#/edit?id=${id}`);
 };
 
 const renderTodo = function ({ id, title, description, dueDate, checked }) {
@@ -169,6 +171,7 @@ const renderDelete = function (
         </div>`;
   body.insertAdjacentHTML("beforeend", deleteModalHtml);
   deleteModal = body.lastElementChild;
+  deleteModal.querySelector(".modal").focus();
   deleteModalConfirmButton = deleteModal.querySelector(".todo__delete__img");
   deleteModalCancelButton = deleteModal.querySelector(".todo__cancel__img");
   deleteModalConfirmButton.addEventListener("click", () =>
@@ -247,7 +250,7 @@ const renderPage = function (currentPage, todosPerPage) {
   );
   console.log(pageTodos);
 
-  let pageUrl = `/todos#page=${currentPage}`;
+  let pageUrl = `/#/todos?page=${currentPage}`;
   updateUrl(pageUrl);
 
   pageTodos.forEach((todoObject) => {

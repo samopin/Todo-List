@@ -155,7 +155,7 @@ const parseEndpoints = function (endPointsString) {
   endpoints.at(0) == "" && (endpoints = endpoints.slice(1));
 
   endpoints = endpoints.map((endpointString) => {
-    let [endpoint, ...queryParameters] = endpointString.split("#");
+    let [endpoint, ...queryParameters] = endpointString.split("?");
     queryParameters = queryParameters.map((queryParameterString) => {
       let queryPairParts = queryParameterString.split("=");
       return {
